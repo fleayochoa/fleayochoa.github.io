@@ -95,7 +95,7 @@ colores = Dict(
 
 # ╔═╡ be3177cd-caf2-47fc-9f00-adc728121576
 begin enlaces = OrderedDict(
-    "Relays (pendiente)" => "desafios/relay.html",
+    "Relays" => "desafios/relay.html",
     "Diodos (pendiente)" => "desafios/diodes.html",
 	"Cómo puedo alimentar mi circuito"=> "desafios/power.html"
 )
