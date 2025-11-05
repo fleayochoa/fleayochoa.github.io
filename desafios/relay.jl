@@ -4,102 +4,69 @@
 using Markdown
 using InteractiveUtils
 
-# ╔═╡ ef59dfd0-b98c-11f0-b701-a320d2c8ea8d
+# ╔═╡ 85c87e5f-0280-4649-ba9d-47f66c0c25a1
 begin
-using HypertextLiteral
-using DataStructures
-using PlutoUI
+	using HypertextLiteral
+	using DataStructures
+	using PlutoUI
 end
 
-# ╔═╡ 45adf599-ab46-474b-be87-f1620fcc18e4
-LocalResource("regulador.jpg")
+# ╔═╡ dd8965ff-c3e7-4109-872a-ff9af1282480
+LocalResource("relays_summary.png")
 
-# ╔═╡ f656ba72-e989-4ef0-8bb4-eb6c8f23784c
-LocalResource("switching.webp",
-			 :width=>200,
-			 :alt => "Regulador switching")
-
-# ╔═╡ 4af1aee6-d4d2-446f-a743-27e2a8661ba9
-LocalResource("./power.png",
-					  :width => 800)
-
-# ╔═╡ 214287e1-8bf6-4e62-878d-8a1e405b0e0a
-### Función para mostrar cuadros con título y texto
-function cuadro(titulo::String, texto::String,
-                color_fondo="#E6F7FF", color_borde="#2196F3")
-
-	texto_html = HTML(replace(texto, "\n" => "<br>"))
-
-    @htl("""
-    <div style="
-        background-color:$(color_fondo);
-        border-left:6px solid $(color_borde);
-        padding:12px;
-        margin:10px 0;
-        border-radius:8px;
-        box-shadow:2px 2px 4px rgba(0,0,0,0.1);
-        font-family: 'Segoe UI', sans-serif;">
-        
-        <div style="font-weight:bold; font-size:1.1em; color:$(color_borde); margin-bottom:5px;">
-            $(titulo)
-        </div>
-        
-        <div style="color:#333; line-height:1.4;">
-            <p>$(texto_html) </p>
-        </div>
-    </div>
-    """)
-end;
-
-# ╔═╡ a57fd3b7-bec7-4941-aff3-c354441a2503
-cuadro("🛠¿Cuáles son los requisitos de mi circuito?",
-  "Como todos los problemas de ingeniería, parte de conocer el problema es conocer las restricciones de la solución. En nuestro caso necesitamos responder las siguientes preguntas: ¿Cuánta corriente necesito? ¿Necesito diferentes niveles de voltaje en mi circuito? ¿El prototipo puede estar conectado al tomacorriente o tiene que ser de batería? 
-	   
-En base a esto, podemos comenzar a descartar soluciones")
-
-
-# ╔═╡ 3c123600-c9a2-4253-ae5c-fc26195e5b50
-cuadro("⚡¿Cuánta corriente necesita mi circuito?",
-	  "Recordemos que una fuente de voltaje entrregará tanta corriente como pueda con tal de mantener una diferencia de voltaje de 5V en sus terminales.
-	   
-	   ¿Y cómo puedo llegar a decir que un componente consume mucha corriente en mi circuito? En lo personal, para este caso, recomiendo comparar la máxima corriente que puede llegar a consumir un componente con la máxima corriente que puede suministrar tu microcontrolador.
-	   
-	   Por ejemplo, el arduino UNO tiene un regulador lineal de 5V que podría llegar a entregar hasta 500mA (Mientras la fuente que alimenta el arduino sea capaz de entregar más que eso). Sin embargo, recomiendo no sobrepasar los 200mA. Si aumentamos el consumo de corriente, el regulador se calentará más y reducirá la vida útil de nuestro microcontrolador.
-	   
-	   Entonces, la pregunta del millón ¿Cómo sé cuánta corriente consume mi circuito? Para esto, debemos buscar las datasheets de nuestros componentes, por ejemplo, un LED típico de arduino consume unos 10mA con una caída de 2V aproximadamente, un servomotor chico, puede llegar a consumir hasta 200mA mientras se mueve. Debemos tener en consideración todos los componentes que tienen un consumo significativo de corriente para tener un aproximado de la cantidad de corriente total que consume el circuito.
-	   
-	   ")
-
-# ╔═╡ 8b766f15-84e4-4ac3-bc25-8ba3847fc489
-function cuadro_links(titulo::String, enlaces::OrderedDict, colores=Dict())
-    principal = get(colores, "principal", "#0033A0")
-    fondo = get(colores, "fondo", "#F9F9F9")
-    texto = get(colores, "texto", "#222222")
-
-    items = [
-        @htl("<li><a href='$url' style='text-decoration: underline;'>📚$nombre</a></li>")
-        for (nombre, url) in enlaces
-    ]
-
-    @htl("""
-    <div style="
-        background-color: $fondo;
-        border-left: 6px solid $principal;
-        border-radius: 10px;
-        padding: 12px 18px;
-        margin: 10px 0;
-        font-family: sans-serif;">
-        <h3 style="color: $principal; margin-top: 0;">$titulo</h3>
-        <ul style="list-style-type: none; padding-left: 0;">
-            $items
-        </ul>
-    </div>
-    """)
-end;
-
-
-# ╔═╡ 9f89e199-2844-41a8-86fe-f4c996eeee34
-colores = Dict(
+# ╔═╡ 04bdb400-b9f6-11f0-9083-b1d613258f7c
+begin
+	function cuadro(titulo::String, texto::String,
+	                color_fondo="#E6F7FF", color_borde="#2196F3")
+	
+		texto_html = HTML(replace(texto, "\n" => "<br>"))
+	
+	    @htl("""
+	    <div style="
+	        background-color:$(color_fondo);
+	        border-left:6px solid $(color_borde);
+	        padding:12px;
+	        margin:10px 0;
+	        border-radius:8px;
+	        box-shadow:2px 2px 4px rgba(0,0,0,0.1);
+	        font-family: 'Segoe UI', sans-serif;">
+	        
+	        <div style="font-weight:bold; font-size:1.1em; color:$(color_borde); margin-bottom:5px;">
+	            $(titulo)
+	        </div>
+	        
+	        <div style="color:#333; line-height:1.4;">
+	            <p>$(texto_html) </p>
+	        </div>
+	    </div>
+	    """)
+	end;
+	function cuadro_links(titulo::String, enlaces::OrderedDict, colores=Dict())
+	    principal = get(colores, "principal", "#0033A0")
+	    fondo = get(colores, "fondo", "#F9F9F9")
+	    texto = get(colores, "texto", "#222222")
+	
+	    items = [
+	        @htl("<li><a href='$url' style='text-decoration: underline;'>📚$nombre</a></li>")
+	        for (nombre, url) in enlaces
+	    ]
+	
+	    @htl("""
+	    <div style="
+	        background-color: $fondo;
+	        border-left: 6px solid $principal;
+	        border-radius: 10px;
+	        padding: 12px 18px;
+	        margin: 10px 0;
+	        font-family: sans-serif;">
+	        <h3 style="color: $principal; margin-top: 0;">$titulo</h3>
+	        <ul style="list-style-type: none; padding-left: 0;">
+	            $items
+	        </ul>
+	    </div>
+	    """)
+	end;
+	colores = Dict(
     "azul_bg"=> "#E6F7FF",
 	"azul_bd"=> "#2196F3",
     "amarillo_bg"=> "#FFE4B8",
@@ -107,35 +74,19 @@ colores = Dict(
     "rojo_bg"=> "#FCCABA",
     "rojo_bd"=> "#C93508"
 );
+end;
 
-# ╔═╡ 84099fba-4d1a-4cc2-906e-211f80f6d94f
-cuadro("¿Cómo puedo alimentar mi cricuito?", "Bienvenid@ a la cápsula introductoria para alimentar tus circuitos.
-	   
-	   Esta es una guía condensadísima y básica sobre como armar circuitos de alimentación, recuerda siempre respetar los límites de seguridad de cada componente e investigar por tu cuenta. Una conexión mal hecha o límite no respetado puede llegar a quemar tu circuito COMPLETO.", 
-	   colores["rojo_bg"], colores["rojo_bd"])
+# ╔═╡ 2434e3ed-fe42-42dc-889f-d992a5e83d1a
+cuadro("¿Qué es un relay?",
+	  "Un relay es un switch electromecánico controlado electronicamente. Este usa una bobina para abrir o cerrar contactos mecánicos, permitiendo controlar circuitos de alta potencia o voltaje usando una señal eléctrica débil.")
 
-# ╔═╡ a20e5381-e6d2-477b-8978-bd93a985c1ea
-cuadro("🔋¿Necesito baterías?",
-	  "Escoger que batería usar y cómo se usan pueden llegar a ser preguntas difíciles de responder al comienzo, cada una cumple con distintas funciones y tienen distintas capacidades. 
-	   
-	   En el caso de no necesitar baterías podemos usar distintos tipos de fuentes de voltaje externas, fuentes de 9V 5V, etc. El principal desafío en este caso consiste en encontrar los conectores necesarios y un regulador de voltaje de ser necesario.", colores["rojo_bg"], colores["rojo_bd"])
+# ╔═╡ b77fb3aa-ab90-4a64-b106-7952d08160ec
+cuadro("¿Cuáles son las conexiones de un relay?",
+	  "Un relay típico suele tener 5 pines, 2 pines corresponden a los pines necesarios para dar corriente a la bobina. Luego vienen 3 pines: pin común (COM), pin normalmente abierto (NO) y normalmente cerrado (NC). Si no hay ninguna indicación escrita es posible saber cual pin es cual usando un multímetro. Si no hay corriente de magnetización, entonces el COM y NC están en cortocircuito (como si hubiera un cable) y por otra parte si hay corriente de magnetización, entonces, COM y NO estarán en cortocircuito mientras COM-NC estará en circuito abierto.")
 
-# ╔═╡ 1eef0327-c443-4641-9e74-bd4fe3251bbe
-cuadro("✌ Reguladores de voltaje",
-	  "Los reguladores de voltaje son un mundo por sí mismos, sin embargo, en esta guía nos quedaremos con la parte más simplificada. 
-	   Un regulador de voltaje es un componente electrónico que mantiene un voltaje fijo en la salida mientras el voltaje de entrada cumpla con algunas condiciones. En esta guía abordaremos 2 tipos de reguladores de voltaje, los reguladores lineales y los reguladores conmutadores (switching).", colores["amarillo_bg"], colores["amarillo_bd"])
-
-# ╔═╡ 052af18d-bb16-4fa6-8547-7d18f390e988
-cuadro("Regulador lineal de voltaje",
-	  "Un regulador lineal de voltaje se encarga de mantener un voltaje constante en la salida disipando en forma de calor el 'voltaje sobrante' por llamarlo de alguna manera, es decir, si por ejemplo, alimentas un regulador lineal de 5V con 7V, el regulador tendrá una caída (7-5)V = 2V y disipará esa energía en forma de calor.
-	   
-	   La ventaja de estos reguladores es que suelen ser muy baratos y sencillos para la carga que pueden llegar a manejar, además, la salida suele ser muy limpia en términos de ruido. La desventaja viene con la eficiencia energética y la disipación de calor. Nuestro regulador lineal disipará aún más potencia conforme haya más diferencia de voltaje entre el voltaje de alimentación y el voltaje de salida, por lo que el ideal es alimentarlo con una fuente lo más cercana posible al voltaje de salida siempre considerando el rango operacional del regulador.", colores["rojo_bg"], colores["rojo_bd"])
-
-# ╔═╡ f57631e4-d67f-4f6e-9c13-4f01d5230804
-cuadro("Regulador tipo switching", 
-	   "Un regulador tipo switching actúa de una manera completamente distinta al regulador lineal, este tipo de reguladores actúan apagando y prendiendo un switch muy rápido (en el orden de 100kHz hacia arriba.) almacena la energía en un componente pasivo y la libera de forma controlada.
-	   
-	   La ventaja de este tipo de reguladores es que suele ser mucho más eficientes que un regulador lineal, es fácil de encontrar reguladores con salida ajustable y además este tipo de topología puede tanto elevar como disminuir el voltaje de salida respecto del voltaje de la entrada (conversor step-up y buck down respectivamente). Sin embargo, no todo son cosas buenas, por la velocidad a la que conmutan, estas fuentes son mucho más ruidosas y pueden llegar a generar interferencia EM, además, es mucho más dificil de diseñar a comparación de un regulador lineal y suelen ser más caras.   ", colores["rojo_bg"], colores["rojo_bd"])
+# ╔═╡ 4532f68a-05c0-417a-a5f7-fe932cfe4e70
+cuadro("Consideraciones importantes",
+	  "No solo debemos tener en cuenta la corriente máxima que puede soportar el relay y la corriente que consume la magnetización de la bobina. También debemos tener en cuenta los cables que estamos usando para las conexiones, un cable delgado como un jumper de una protoboard no será capaz de manejar una carga conectada al tomacorriente. Si ese es el caso, entonces es recomendable tener un relay soldado en una PCB diseñada para manejar ese tipo de carga. Estos módulos no son caros y además tienen pines extra que facilitan el desarrollo del esquemático para su circuito.", colores["rojo_bg"], colores["rojo_bd"])
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -456,19 +407,11 @@ version = "17.5.0+2"
 """
 
 # ╔═╡ Cell order:
-# ╟─84099fba-4d1a-4cc2-906e-211f80f6d94f
-# ╟─a57fd3b7-bec7-4941-aff3-c354441a2503
-# ╟─a20e5381-e6d2-477b-8978-bd93a985c1ea
-# ╟─3c123600-c9a2-4253-ae5c-fc26195e5b50
-# ╟─1eef0327-c443-4641-9e74-bd4fe3251bbe
-# ╟─052af18d-bb16-4fa6-8547-7d18f390e988
-# ╟─45adf599-ab46-474b-be87-f1620fcc18e4
-# ╟─f57631e4-d67f-4f6e-9c13-4f01d5230804
-# ╟─f656ba72-e989-4ef0-8bb4-eb6c8f23784c
-# ╟─4af1aee6-d4d2-446f-a743-27e2a8661ba9
-# ╟─214287e1-8bf6-4e62-878d-8a1e405b0e0a
-# ╟─8b766f15-84e4-4ac3-bc25-8ba3847fc489
-# ╟─9f89e199-2844-41a8-86fe-f4c996eeee34
-# ╟─ef59dfd0-b98c-11f0-b701-a320d2c8ea8d
+# ╟─2434e3ed-fe42-42dc-889f-d992a5e83d1a
+# ╟─b77fb3aa-ab90-4a64-b106-7952d08160ec
+# ╟─dd8965ff-c3e7-4109-872a-ff9af1282480
+# ╟─4532f68a-05c0-417a-a5f7-fe932cfe4e70
+# ╟─04bdb400-b9f6-11f0-9083-b1d613258f7c
+# ╟─85c87e5f-0280-4649-ba9d-47f66c0c25a1
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
